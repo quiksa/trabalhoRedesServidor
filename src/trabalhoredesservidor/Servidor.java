@@ -38,7 +38,7 @@ public class Servidor {
                     System.out.println("Waiting for clients to connect...");
                     while (!serverSocket.isClosed()) {
                         Socket clientSocket = serverSocket.accept();
-                        System.out.println("Conexão de " + clientSocket.getInetAddress().getHostName());
+                        System.out.println("Connecting " + clientSocket.getInetAddress().getHostName() + "...");
                         clientProcessingPool.submit(new ClientTask(clientSocket));
 
                     }
@@ -65,7 +65,10 @@ public class Servidor {
 
         @Override
         public void run() {
-            System.out.println("Client connected!");
+            System.out.println("Client " + clientSocket.getInetAddress().getHostAddress() + " connected!");
+
+            long threadId = Thread.currentThread().getId();
+            System.out.println("ThreadId = " + threadId);
 
             try {
                 InputStream input = clientSocket.getInputStream();
@@ -78,7 +81,7 @@ public class Servidor {
                     while (true) {
                         mensagemRecebida = in.readLine();
 
-                        System.out.println("Mensagem recebida :" + mensagemRecebida);
+                        System.out.println("Message received of " + clientSocket.getInetAddress().getHostAddress() + " :" + mensagemRecebida);
 
                         if (mensagemRecebida == null) { // cliente se desconextou
                             break;
@@ -96,12 +99,12 @@ public class Servidor {
                             System.out.println("Não Possui buscas para esta Consulta");
                             retorno = "Consultar Incorreta";
                         }
-
+                        System.out.println("Message send to client " + clientSocket.getInetAddress().getHostAddress() + ": " + retorno);
                         outToClient.println(retorno);
 
                     }
 
-                    System.out.println("Conexão encerrada com: " + clientSocket.getInetAddress().getHostName());
+                    System.out.println("Connection closed : " + clientSocket.getInetAddress().getHostName());
 
                     outToClient.close();
                     clientSocket.close();
@@ -126,7 +129,7 @@ public class Servidor {
                 tipo = tipo + ch;
             }
         }
-        System.out.println(tipo);
+        //System.out.println(tipo);
         if (tipo.equals("autores") == true) {
 
             return "Autores: Fabio , Calvin , Iago e Guilherme";

@@ -81,7 +81,7 @@ public class Servidor {
                     while (true) {
                         mensagemRecebida = in.readLine();
 
-                        System.out.println("Message received of " + clientSocket.getInetAddress().getHostAddress() + " :" + mensagemRecebida);
+                        System.out.println("Message received of " + clientSocket.getInetAddress().getHostAddress() + " : " + mensagemRecebida);
 
                         if (mensagemRecebida == null) { // cliente se desconextou
                             break;
